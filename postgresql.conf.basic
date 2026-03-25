@@ -1,0 +1,46 @@
+# ------------------------------------------------------------------------------
+# postgresql.conf.basic
+# ------------------------------------------------------------------------------
+# This is a basic configuration file for PostgreSQL v17+
+# based on the project's Database Design Standard.
+# Reference: DatabaseDesignStandard.md (P_CNF001 - P_CNF004)
+# ------------------------------------------------------------------------------
+# --- 1. General Settings ---
+listen_addresses = '*'# Default: 'localhost'
+#max_connections = 100 # Default: 100
+#shared_buffers = 128MB # Default: 128MB
+# --- 2. WAL & Recovery (P_CNF001) ---
+# wal_level = replica is default. Commented out as per P_CNF001.
+#wal_level = replica
+#max_wal_size = 1GB # Default: 1GB
+#min_wal_size = 80MB            # Default: 80MB
+# --- 3. Logging & Monitoring (P_CNF002, P_CNF003) ---
+logging_collector = on# Default: off
+#log_directory = 'log'          # Default: 'log'
+#log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log' # Default
+#log_rotation_age = 1d          # Default: 1d
+log_rotation_size = 0# Default: 10MB (Set to 0 to disable size-based rotation)
+log_destination = 'csvlog'# Default: stderr (P_CNF003)
+# log_min_duration_statement (P_CNF002: default -1 (disabled))
+# Set to 30s as per P_CNF002.
+log_min_duration_statement = 30000
+# Additional Recommended Logging (Enabled for visibility)
+log_checkpoints = on# Default: off
+log_connections = on# Default: off
+log_disconnections = on# Default: off
+log_lock_waits = on# Default: off
+log_temp_files = 0# Default: -1
+log_autovacuum_min_duration = 0# Default: -1 (Log all autovacuum activity)
+# --- 4. Memory & Performance (P_CNF004) ---
+# Default work_mem is maintained at 4MB (P_CNF004)
+# Large sorts should be handled with dynamic SET work_mem in sessions.
+#work_mem = 4MB
+#maintenance_work_mem = 64MB    # Default: 64MB
+# --- 5. Vacuum & Analyze (P_VCM001, O_VCM001) ---
+# autovacuum = on is default. (Commented out as per standard note)
+#autovacuum = on
+#autovacuum_vacuum_scale_factor = 0.2
+#autovacuum_analyze_scale_factor = 0.1
+# ------------------------------------------------------------------------------
+# End of postgresql.conf.basic
+# ------------------------------------------------------------------------------

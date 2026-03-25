@@ -11,6 +11,7 @@ This standard aims to provide designers with consistent criteria for building da
 
 ## 2. Prerequisites
 - The target DBMS is PostgreSQL v17.0 or later.
+- This standard assumes a standalone service environment and is not optimized for managed services (Amazon RDS/Aurora, GCP Cloud SQL, Microsoft Azure Database for PostgreSQL, etc.). However, notes regarding differences in managed services are included where relevant.
 - PostgreSQL is an RDBMS; designs must leverage its characteristics and constraints.
 - This standard does not assume use of the DBMS as a substitute for a file system.
 - This standard does not cover systems requiring broad future extensibility (e.g., generic ERP). It follows the YAGNI principle, restricting unnecessary data definitions. However, excluding that aspect, it can be adapted for such systems.
@@ -431,8 +432,12 @@ Enable WAL to support PITR (Point-in-Time Recovery). Use the default WAL level `
 
 - P_CNF002:☆☆☆ Configure `log_min_duration_statement`.
 Set this parameter to enable slow query detection during development and production monitoring. Queries exceeding the threshold are logged for analysis.
-Default setting: 30 seconds.
+Default production environment setting: 30 seconds (30000 ms). This value should be adjusted based on the actual performance of the system.
 `log_min_duration_statement = 30000`
+
+> **Note**
+> * The default value for `log_min_duration_statement` is 0 (log all queries). Setting it to 30000 (30 seconds) enables logging only for queries that take longer than 30 seconds.
+> * This setting is particularly important for identifying performance bottlenecks in development and production.
 
 - P_CNF003:☆☆ Use CSV as the standard log format.
 CSV logs are easy to inspect visually and with spreadsheet tools. JSON format is acceptable if a dedicated log analysis platform (e.g., Elasticsearch) is in use. Always enable `logging_collector` regardless of format.
